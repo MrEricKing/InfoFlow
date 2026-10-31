@@ -1,0 +1,162 @@
+{
+  "active_insight_profile_context_sha256": "261eec3f539ecc5ee6ce0508f89c5d60def028836b21e9318f85bed0d8b496e2",
+  "channel_catalog_version": 1,
+  "channels": [
+    {
+      "boundary_prompt": "Exclude generic robotics news unless it directly informs TCP artificial muscle research.",
+      "default_flow_policy": "normal",
+      "description": "TCP、纤维扭转缠绕、人工肌肉、柔性驱动中的核心研究内容。",
+      "enabled": true,
+      "focus_prompt": "Prioritize TCP artificial muscle mechanisms, fabrication, testing, and actuator research details.",
+      "id": "tcp_artificial_muscle_core",
+      "label": "TCP / 人工肌肉核心研究",
+      "reading_depth": "deep"
+    },
+    {
+      "boundary_prompt": "Exclude broad consumer robotics or automation items without soft-actuation relevance.",
+      "default_flow_policy": "normal",
+      "description": "软体机器人、柔性驱动、材料与器件方向的相邻研究视野。",
+      "enabled": true,
+      "focus_prompt": "Prioritize adjacent soft actuation, soft robotics, compliant materials, and device-level research.",
+      "id": "soft_actuation_horizon",
+      "label": "柔性驱动视野拓展",
+      "reading_depth": "medium"
+    },
+    {
+      "boundary_prompt": "Exclude generic campus or publication-industry news unless it changes research practice.",
+      "default_flow_policy": "normal",
+      "description": "跨学科研究前沿、科研方法、学术工作流与通用研究能力。",
+      "enabled": true,
+      "focus_prompt": "Prioritize research methods, academic workflows, frontier papers, and durable scholarly context.",
+      "id": "academic_horizon",
+      "label": "学术视野拓展",
+      "reading_depth": "medium"
+    },
+    {
+      "boundary_prompt": "Exclude generic AI productivity tips without technical or strategic substance.",
+      "default_flow_policy": "normal",
+      "description": "AI、Agents、模型能力、研究进展与一线研究者观点。",
+      "enabled": true,
+      "focus_prompt": "Prioritize AI model capability, agents, frontier research, tooling shifts, and practitioner signals.",
+      "id": "ai_agents_frontier",
+      "label": "AI & Agents 前沿",
+      "reading_depth": "medium"
+    },
+    {
+      "boundary_prompt": "Exclude shallow launch posts unless there is concrete implementation or workflow value.",
+      "default_flow_policy": "normal",
+      "description": "开源软件、开发工具、工程实践、贡献者博客与工具链演进。",
+      "enabled": true,
+      "focus_prompt": "Prioritize open-source tools, engineering workflows, implementation practice, and maintainable systems.",
+      "id": "open_source_tools_practice",
+      "label": "开源工具与工程实践",
+      "reading_depth": "medium"
+    },
+    {
+      "boundary_prompt": "Exclude clickbait market commentary without clear evidence, thesis, or decision relevance.",
+      "default_flow_policy": "normal",
+      "description": "传统证券、宏观、公司、策略、资产配置与投资研究。",
+      "enabled": true,
+      "focus_prompt": "Prioritize securities investing, macro context, company analysis, strategy, and portfolio implications.",
+      "id": "securities_investing",
+      "label": "证券投资",
+      "reading_depth": "medium"
+    },
+    {
+      "boundary_prompt": "Exclude hype, promotional airdrop chatter, and unsourced speculation.",
+      "default_flow_policy": "normal",
+      "description": "加密投资、空投、套利、链上机会、风险事件与市场结构。",
+      "enabled": true,
+      "focus_prompt": "Prioritize crypto market structure, risk events, on-chain signals, protocol changes, and actionable context.",
+      "id": "cryptocurrency",
+      "label": "加密货币",
+      "reading_depth": "light"
+    },
+    {
+      "boundary_prompt": "Do not use this channel when a more specific active channel clearly fits the article.",
+      "default_flow_policy": "normal",
+      "description": "需要人工归类或等待后续 reroute 的文章。",
+      "enabled": true,
+      "focus_prompt": "Use this channel when no active channel fits, confidence is too low, or lifecycle fallback requires review.",
+      "id": "needs_review",
+      "label": "待归类",
+      "reading_depth": "medium"
+    }
+  ],
+  "content_extraction_status": "not_checked",
+  "content_text": "Source context body about agent tooling and implementation workflows.",
+  "content_text_source": "content_text",
+  "endpoint": "https://ai.example.com/v1/chat/completions",
+  "excluded_fields": [
+    {
+      "field": "URL",
+      "reason": "Excluded from runtime AI prompt to keep external context minimal."
+    },
+    {
+      "field": "Published at",
+      "reason": "Excluded from runtime AI prompt; local sorting and audit can still use it."
+    },
+    {
+      "field": "Reader status",
+      "reason": "Excluded from runtime AI prompt; local state should not steer generation directly."
+    }
+  ],
+  "fallback_request_body_sha256": "bdd2fd9105904c2a5b59bba2dc90ee3ceba3294fac05d579a8cea97682ab731e",
+  "feature_schema_version": "insight_feature_v1",
+  "human_evidence": {
+    "channel_corrections": null
+  },
+  "max_tokens": 4096,
+  "model": "snapshot-model",
+  "profile": "general",
+  "profile_version": "default-2026-04-29",
+  "prompt_version": "insight-engine-v2-routing-v1",
+  "provider": "openai-compatible",
+  "request_body_sha256": "cf2e300fd02ab0102445c55d54e3ed900a11ac41734351ec312e94d0a4d48635",
+  "score_version": "score_v1_hand_weighted",
+  "source_channel_tendencies": [
+    {
+      "channel_id": "ai_agents_frontier",
+      "is_primary": true,
+      "notes": "source routinely covers agent frontier work",
+      "tendency": 0.91
+    }
+  ],
+  "source_flow_policy": "high_frequency_brief",
+  "source_folder": "AI / Agents",
+  "source_preference_profile": {
+    "bad_article_patterns": [],
+    "good_article_criteria": [],
+    "ignored_topics": [],
+    "is_empty": true,
+    "negative_example_summaries": [],
+    "positive_example_summaries": [],
+    "preferred_content_types": [],
+    "preferred_topics": [],
+    "profile_version": null,
+    "quality_notes": null,
+    "render_stats": {
+      "capped_sections": [],
+      "included_counts": {},
+      "max_rendered_bytes": 4096,
+      "omitted_counts": {},
+      "rendered_byte_count": 405
+    },
+    "subscription_reason": null
+  },
+  "source_profile_is_empty": true,
+  "source_profile_version": null,
+  "stats": {
+    "content_text_char_count": 69,
+    "content_text_estimated_token_count": 18,
+    "content_text_was_truncated": false,
+    "source_content_char_count": 69,
+    "system_message_char_count": 635,
+    "system_message_estimated_token_count": 159,
+    "user_message_char_count": 12103,
+    "user_message_estimated_token_count": 3026
+  },
+  "system_message_sha256": "d2a4d6afe7a1ad5dbb10ca695c9f9c6edf5ec9c515eaf539740bef1769834bc4",
+  "temperature": 0.2,
+  "user_message_sha256": "56bb60db517456e5fa613b6ad6ee5b758877611a5908524a274388536f75dda1"
+}

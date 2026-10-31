@@ -1,0 +1,86 @@
+services:
+  app:
+    image: ${IMAGE_NAME:-ghcr.io/mrericking/infoflow-aggregator}:${IMAGE_TAG:-latest}
+    container_name: infoflowaggregator-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rsshub:
+        condition: service_started
+    ports:
+      - "${APP_HOST_BIND:-127.0.0.1}:${APP_PORT:-5173}:8000"
+    environment:
+      ENVIRONMENT: production
+      API_PREFIX: /api
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/${POSTGRES_DB:-infoflowaggregator}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
+      RSSHUB_BASE_URL: ${RSSHUB_BASE_URL:-http://rsshub:1200}
+      INFOFLOW_ALLOW_UNAUTHENTICATED_PRODUCTION_API: ${INFOFLOW_ALLOW_UNAUTHENTICATED_PRODUCTION_API:?INFOFLOW_ALLOW_UNAUTHENTICATED_PRODUCTION_API must explicitly acknowledge external access control}
+      INFOFLOW_SETTINGS_ENCRYPTION_KEY: ${INFOFLOW_SETTINGS_ENCRYPTION_KEY:?INFOFLOW_SETTINGS_ENCRYPTION_KEY is required}
+      INFOFLOW_AI_GENERAL_API_KEY: ${INFOFLOW_AI_GENERAL_API_KEY:-}
+      INFOFLOW_AI_SENSITIVE_API_KEY: ${INFOFLOW_AI_SENSITIVE_API_KEY:-}
+      KNOWLEDGE_BASE_ROOT: /data/KnowledgeBase
+      SINGLEFILE_EXTENSION_PATH: /app/vendor/singlefile-mv3
+      SINGLEFILE_EXTENSION_ID: jkeljiefjnokjkioahopjglagkbocpbh
+      SINGLEFILE_BROWSER_EXECUTABLE_PATH: /usr/local/bin/playwright-chromium
+      SINGLEFILE_CAPTURE_TIMEOUT_SECONDS: ${SINGLEFILE_CAPTURE_TIMEOUT_SECONDS:-120}
+    volumes:
+      - ${HOST_KNOWLEDGE_BASE_ROOT:-./KnowledgeBase}:/data/KnowledgeBase
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16
+    container_name: infoflowaggregator-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: ${POSTGRES_DB:-infoflowaggregator}
+    volumes:
+      - infoflowaggregator_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  rsshub:
+    image: diygod/rsshub:chromium-bundled
+    container_name: infoflowaggregator-rsshub
+    ports:
+      - "${RSSHUB_HOST_BIND:-127.0.0.1}:${RSSHUB_PORT:-1200}:1200"
+    restart: always
+    depends_on:
+      - redis
+    environment:
+      NODE_ENV: production
+      CACHE_TYPE: ${CACHE_TYPE:-redis}
+      CACHE_EXPIRE: ${CACHE_EXPIRE:-120}
+      CACHE_CONTENT_EXPIRE: ${CACHE_CONTENT_EXPIRE:-1800}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/}
+      TWITTER_AUTH_TOKEN: ${TWITTER_AUTH_TOKEN}
+      YOUTUBE_KEY: ${YOUTUBE_KEY}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:1200/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  redis:
+    image: redis:alpine
+    container_name: infoflowaggregator-redis
+    restart: always
+    volumes:
+      - infoflowaggregator_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
+
+volumes:
+  infoflowaggregator_postgres_data:
+  infoflowaggregator_redis_data:

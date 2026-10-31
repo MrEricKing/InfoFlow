@@ -1,0 +1,28 @@
+{
+  "name": "infoflowaggregator",
+  "version": "3.3.1",
+  "private": true,
+  "scripts": {
+    "stop": "node ./scripts/dev-stop.mjs",
+    "dev": "node ./scripts/dev.mjs",
+    "dev:db": "node ./scripts/dev-postgres.mjs",
+    "dev:client": "npm --prefix frontend run dev",
+    "dev:server": "node ./scripts/run-backend-dev.mjs",
+    "py": "node ./scripts/python.mjs",
+    "py:backend": "node ./scripts/python.mjs --cwd backend",
+    "alembic": "node ./scripts/python.mjs -m alembic -c backend/alembic.ini",
+    "test:backend:parallel": "node scripts/host-validation.mjs node ./scripts/python.mjs --cwd backend -m pytest -n 4 --dist worksteal",
+    "test:backend": "node scripts/host-validation.mjs node ./scripts/python.mjs --cwd backend -m pytest tests -m \"not postgres\" -n 4 --dist worksteal",
+    "test:backend:serial": "node scripts/host-validation.mjs node ./scripts/python.mjs --cwd backend -m pytest tests -m \"not postgres\"",
+    "test:backend:postgres": "node scripts/host-validation.mjs node ./scripts/python.mjs --cwd backend -m pytest tests/test_postgres_integration.py -m postgres -n 6 --dist worksteal",
+    "test:backend:postgres:serial": "node scripts/host-validation.mjs node ./scripts/python.mjs --cwd backend -m pytest tests/test_postgres_integration.py -m postgres",
+    "test:backend:config": "node scripts/host-validation.mjs node ./scripts/python.mjs --cwd backend -m pytest tests/test_config.py -n 4 --dist worksteal",
+    "test:frontend:logic": "node scripts/host-validation.mjs node ./scripts/test-frontend-logic.mjs",
+    "test:client:polling": "node scripts/host-validation.mjs node ./scripts/test-operation-polling.mjs",
+    "lint:backend": "node scripts/host-validation.mjs node ./scripts/python.mjs --cwd backend -m ruff check app tests",
+    "lint:client": "node scripts/host-validation.mjs npm --prefix frontend run lint",
+    "lint": "node scripts/host-validation.mjs --shell \"npm run lint:backend && npm run lint:client\"",
+    "build:client": "node scripts/host-validation.mjs npm --prefix frontend run build",
+    "typecheck:client": "node scripts/host-validation.mjs npm --prefix frontend run typecheck"
+  }
+}
